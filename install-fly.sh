@@ -1,0 +1,1 @@
+curl -LJO https://github.com/concourse/concourse/releases/download/v3.9.0/fly_darwin_amd64 && install ./fly_darwin_amd64 /usr/local/bin/fly

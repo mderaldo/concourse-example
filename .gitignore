@@ -6,4 +6,7 @@ keys/
 gen/
 out/
 
+# Binaries
+
+fly_darwin_amd64
 

@@ -19,8 +19,19 @@ cp ./keys/worker/worker_key.pub ./keys/web/authorized_worker_keys
 cp ./keys/web/tsa_host_key.pub ./keys/worker
 ```
 
+#Run Concourse
+
+```
+$ docker-compose up
+```
+
+The concourse will be available at http://127.0.0.1:8080
+
 #Install Fly CLI
 
+```bash
+$ chmod +x install-fly.sh && sh install-fly.sh
+```
 
 [concourse-site]: http://concourse.ci/
 [docker]: https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac
