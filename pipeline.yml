@@ -18,7 +18,7 @@ resources:
   type: semver
   source:
     driver: git
-    initial_version: 1.0.0
+    initial_version: 1
     uri: git@github.com:thegoldenhoney/thegoldenhoney.github.io.git
     branch: master
     file: version
@@ -42,6 +42,9 @@ jobs:
     - task: compile-task
       file: pipeline-repo/tasks/compile.yml
       image: ubuntu-image
+    
+    - put: version
+      params: {bump: maior}
 
 - name: unit-test
   serial: true
