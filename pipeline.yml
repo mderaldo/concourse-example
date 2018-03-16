@@ -6,6 +6,14 @@ resources:
     branch: master
     private_key: ((private-repo-key))
 
+- name: pipeline-repo
+  type: git
+  source: 
+    uri: git@github.com:mderaldo/concourse-example.git
+    branch: master
+    private_key: ((private-repo-key))
+
+
 - name: version
   type: semver
   source:
@@ -25,47 +33,51 @@ jobs:
 - name: compile
   serial: true
   plan:
+    - get: pipeline-repo
     - get: version
     - get: ubuntu-image
     - get: blog-repo
       trigger: true
 
     - task: compile-task
-      file: blog-repo/tasks/compile.yml
+      file: pipeline-repo/tasks/compile.yml
       image: ubuntu-image
 
 - name: unit-test
   serial: true
   plan:
+    - get: pipeline-repo
     - get: ubuntu-image
     - get: blog-repo
       passed: [compile]
       trigger: true
 
     - task: unit-task
-      file: blog-repo/tasks/unit.yml
+      file: pipeline-repo/tasks/unit.yml
       image: ubuntu-image
 
 - name: package
   serial: true
   plan:
+    - get: pipeline-repo
     - get: ubuntu-image
     - get: blog-repo
       passed: [unit-test]
       trigger: true
 
     - task: package-task
-      file: blog-repo/tasks/package.yml
+      file: pipeline-repo/tasks/package.yml
       image: ubuntu-image
 
 - name: deploy
   serial: true
   plan:
+    - get: pipeline-repo
     - get: ubuntu-image
     - get: blog-repo
-      passed: [unit-test]
+      passed: [package]
       trigger: true
 
     - task: deploy-task
-      file: blog-repo/tasks/deploy.yml
+      file: pipeline-repo/tasks/deploy.yml
       image: ubuntu-image
