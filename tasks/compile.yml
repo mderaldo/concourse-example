@@ -5,7 +5,6 @@ image_resource:
   source: {repository: ubuntu}
 
 inputs:
-- name: blog
 - name: version
 
 run:

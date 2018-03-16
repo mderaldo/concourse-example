@@ -6,8 +6,6 @@ image_resource:
     repository: ruby
     tag: '2.4'
 
-inputs:
-- name: blog
 
 run:
   path: echo
