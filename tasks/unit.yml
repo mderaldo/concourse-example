@@ -6,7 +6,15 @@ image_resource:
     repository: ruby
     tag: '2.4'
 
+inputs:
+- name: version
+
 run:
-  path: echo
-  args: ["Seu blog tá por aqui"]
+  dir: version
+  path: bash
+  args:
+  - -exc
+  - |
+    ls -al
+    cat number
 
