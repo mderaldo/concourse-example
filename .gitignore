@@ -10,3 +10,6 @@ out/
 
 fly_darwin_amd64
 
+credentials.yml
+setup-pipeline.sh
+
