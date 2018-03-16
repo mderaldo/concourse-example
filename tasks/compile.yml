@@ -1,0 +1,21 @@
+platform: linux
+
+image_resource:
+  platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: ubuntu}
+
+inputs:
+- name: blog
+- name: version
+
+run:
+  dir: version
+  path: bash
+    args:
+    - -exc
+    - |
+      ls -al
+      cat number
+

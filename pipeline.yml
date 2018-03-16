@@ -1,0 +1,71 @@
+resources:
+- name: blog-repo
+  type: git
+  source: 
+    uri: git@github.com:thegoldenhoney/thegoldenhoney.github.io.git
+    branch: master
+    private_key: ((private-repo-key))
+
+- name: version
+  type: semver
+  source:
+    driver: git
+    initial_version: 1.0.0
+    uri: git@github.com:thegoldenhoney/thegoldenhoney.github.io.git
+    branch: master
+    file: version
+    private_key: ((private-repo-key))
+
+- name: ubuntu-image
+  type: docker-image
+  source: {repository: ubuntu}
+
+
+jobs:
+- name: compile
+  serial: true
+  plan:
+    - get: version
+    - get: ubuntu-image
+    - get: blog-repo
+      trigger: true
+
+    - task: compile-task
+      file: blog-repo/tasks/compile.yml
+      image: ubuntu-image
+
+- name: unit-test
+  serial: true
+  plan:
+    - get: ubuntu-image
+    - get: blog-repo
+      passed: [compile]
+      trigger: true
+
+    - task: unit-task
+      file: blog-repo/tasks/unit.yml
+      image: ubuntu-image
+
+- name: package
+  serial: true
+  plan:
+    - get: ubuntu-image
+    - get: blog-repo
+      passed: [unit-test]
+      trigger: true
+
+    - task: package-task
+      file: blog-repo/tasks/package.yml
+      image: ubuntu-image
+
+- name: deploy
+  serial: true
+  plan:
+    - get: ubuntu-image
+    - get: blog-repo
+      passed: [unit-test]
+      trigger: true
+
+    - task: deploy-task
+      file: blog-repo/tasks/deploy.yml
+      image: ubuntu-image
