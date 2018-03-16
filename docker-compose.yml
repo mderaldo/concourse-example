@@ -10,7 +10,7 @@ services:
       PGDATA: /database
 
   concourse-web:
-    image: concourse/concourse
+    image: concourse/concourse:3.9.1
     links: [concourse-db]
     command: web
     depends_on: [concourse-db]
@@ -32,6 +32,18 @@ services:
     links: [concourse-web]
     depends_on: [concourse-web]
     command: worker
-    volumes: ["./keys/worker:/concourse-keys"]
+    volumes: ["./keys/worker:/concourse-keys", "~/.ssh:/github-keys"]
     environment:
       CONCOURSE_TSA_HOST: concourse-web
+      CONCOURSE_GITHUB_KEY: "${GITHUB_PRIVATE_KEY}"
+
+  concourse-worker-2:
+    image: concourse/concourse
+    privileged: true
+    links: [concourse-web]
+    depends_on: [concourse-web]
+    command: worker
+    volumes: ["./keys/worker:/concourse-keys", "~/.ssh:/github-keys"]
+    environment:
+      CONCOURSE_TSA_HOST: concourse-web
+      CONCOURSE_GITHUB_KEY: "${GITHUB_PRIVATE_KEY}"
