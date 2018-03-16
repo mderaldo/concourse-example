@@ -11,9 +11,9 @@ inputs:
 run:
   dir: version
   path: bash
-    args:
-    - -exc
-    - |
-      ls -al
-      cat number
+  args:
+  - -exc
+  - |
+    ls -al
+    cat number
 
